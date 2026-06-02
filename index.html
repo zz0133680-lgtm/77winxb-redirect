@@ -2,16 +2,16 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Al-Jadid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-color=1.0, user-scalable=no">
+    <title>77winxb</title>
     <style>
-        /* تصميم شاشة التحميل الخلفية */
+        /* تصميم شاشة التحميل الخلفية الاحترافية للألعاب */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #0b0e14; /* لون داكن مريح ومناسب للألعاب */
+            background: radial-gradient(circle, #141124 0%, #0b0813 100%); /* خلفية متدرجة داكنة فخمة */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
@@ -23,59 +23,105 @@
 
         .splash-container {
             text-align: center;
+            width: 80%;
+            max-width: 350px;
         }
 
-        /* اسم التطبيق */
+        /* اسم التطبيق المحدث والمشع */
         .app-name {
             color: #ffffff;
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 36px;
+            font-weight: 900;
             margin-bottom: 5px;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
         /* حالة الاتصال */
         .status-text {
-            color: #8a99ad;
-            font-size: 14px;
-            margin-bottom: 25px;
+            color: #7b86a0;
+            font-size: 13px;
+            margin-bottom: 30px;
+            font-weight: 500;
         }
 
-        /* تصميم دائرة التحميل الاحترافية */
-        .loader {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            border-top-color: #0088cc; /* لون أزرق شبيه بتليجرام */
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
+        /* حاوية أنبوب التحميل (الهيكل الخارجي) */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        /* الأنبوب الداخلي الممتلئ (المشحون) */
+        .progress-bar {
+            height: 100%;
+            width: 0%; /* يبدأ من صفر ويتغير عبر الجافاسكريبت */
+            background: linear-gradient(90deg, #8a2be2, #00bfff); /* تدرج أرجواني وأزرق مذهل */
+            border-radius: 10px;
+            box-shadow: 0 0 12px #00bfff; /* إضاءة النيون للأنبوب */
+            transition: width 0.05s linear;
+        }
+
+        /* عداد النسبة المئوية الرقمي */
+        .percentage-text {
+            color: #00bfff;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: monospace; /* لجعل الأرقام ثابتة العرض ومريحة للعين */
+            text-shadow: 0 0 8px rgba(0, 191, 255, 0.4);
         }
     </style>
 </head>
 <body>
 
     <div class="splash-container">
-        <div class="app-name">Al-Jadid</div>
-        <div class="status-text">جاري الاتصال بالسيرفر بأمان...</div>
-        <div class="loader"></div>
+        <!-- اسم مشروعك الجديد الشغال -->
+        <div class="app-name">77winxb</div> 
+        <div class="status-text">جاري تحميل موارد اللعبة والاتصال بالسيرفر...</div>
+        
+        <!-- هيكل أنبوب التحميل -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <!-- العداد الرقمي % -->
+        <div class="percentage-text" id="percentage">0%</div>
     </div>
 
     <script>
-        // ⚠️ عندما تنقل موقعك الأسبوع القادم، قم بتغيير هذا الرابط فقط!
+        // ⚠️ رابط ريبليت الحالي المأخوذ من صورتك الأخيرة
         const CURRENT_REPLIT_URL = "https://python--monir10m.replit.app";
 
-        // دالة التوجيه الفوري والسريع ومسح سجل التاريخ لضمان عدم العودة للخلف بالخطأ
-        function redirectToApp() {
-            window.location.replace(CURRENT_REPLIT_URL);
-        }
+        const progressBar = document.getElementById('progressBar');
+        const percentageText = document.getElementById('percentage');
 
-        // تنفيذ التوجيه فوراً عند تحميل الصفحة
-        window.onload = redirectToApp;
+        let count = 0;
+        const duration = 1500; // مدة التحميل الإجمالية بالملي ثانية (1.5 ثانية)
+        const intervalTime = 15; // سرعة تحديث العداد
+        const step = 100 / (duration / intervalTime);
+
+        // دالة تحريك العداد والأنبوب الذكي
+        const loadingInterval = setInterval(() => {
+            count += step;
+            if (count >= 100) {
+                count = 100;
+                clearInterval(loadingInterval);
+                
+                // الانتقال الفوري للسيرفر بعد اكتمال الـ 100% مباشرة
+                setTimeout(() => {
+                    window.location.replace(CURRENT_REPLIT_URL);
+                }, 100);
+            }
+            
+            // تحديث الواجهة الرسومية
+            progressBar.style.width = Math.floor(count) + '%';
+            percentageText.innerText = Math.floor(count) + '%';
+        }, intervalTime);
     </script>
 </body>
 </html>
